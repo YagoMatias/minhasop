@@ -5,6 +5,7 @@ import Home from './Home';
 import Faturamento from './Faturamento';
 import Estoque from './Estoque';
 import Nav from './Nav';
+import Banner from './imagens/crosby_pontovermelho.png';
 
 const App = () => {
   return (
@@ -13,7 +14,7 @@ const App = () => {
         <div className="flex items-center justify-center w-full h-32 bg-blue-950">
           <img
             className="max-w-2xl min-h-20 min-w-40 p-10"
-            src="src/imagens/crosby_pontovermelho.png"
+            src={Banner}
             alt=""
             srcset=""
           />
