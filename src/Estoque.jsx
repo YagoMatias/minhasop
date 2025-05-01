@@ -39,7 +39,7 @@ const Estoque = () => {
   return (
     <>
       <div className="p-6 space-y-4">
-        <div className="flex gap-4 items-center">
+        <div className="flex flex-wrap gap-4 items-center">
           <input
             type="date"
             value={dataInicio}

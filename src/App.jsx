@@ -5,7 +5,7 @@ import Home from './Home';
 import Faturamento from './Faturamento';
 import Estoque from './Estoque';
 import Nav from './Nav';
-import Banner from './imagens/crosby_pontovermelho.png';
+import Banner from './imagens/bannercrosby.png';
 
 const App = () => {
   return (

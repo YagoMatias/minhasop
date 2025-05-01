@@ -5,24 +5,24 @@ const Nav = () => {
   return (
     <nav className="flex justify-center bg-gray-400 w-full min-h-12 max-h-12 items-center">
       <NavLink
-        className="flex justify-center hover:bg-gray-200 min-h-12 items-center w-full focus:bg-gray-200"
+        className="flex justify-center hover:bg-gray-200 min-h-12 items-center w-full focus:bg-gray-200 text-xs"
         to="/"
       >
         <p>Home</p>
       </NavLink>
       <NavLink
-        className="flex justify-center hover:bg-gray-200 min-h-12 items-center w-full focus:bg-gray-200"
+        className="flex justify-center hover:bg-gray-200 min-h-12 items-center w-full focus:bg-gray-200 text-xs"
         to="faturamento"
       >
-        <p>Ranking Faturamento</p>
+        <p>Ranking Lojas</p>
       </NavLink>
       <NavLink
-        className="flex justify-center hover:bg-gray-200 min-h-12 items-center w-full focus:bg-gray-200"
+        className="flex justify-center hover:bg-gray-200 min-h-12 items-center w-full focus:bg-gray-200 text-xs"
         to="estoque"
       >
-        <p>Desempenho de Vendedores</p>
+        <p>Ranking Vendedores</p>
       </NavLink>
-      <a
+      {/* <a
         className="flex justify-center hover:bg-gray-200 min-h-12 items-center w-full focus:bg-gray-200"
         href="https://cursos.universidadecrosby.com/"
         target="blank"
@@ -35,7 +35,7 @@ const Nav = () => {
         target="blank"
       >
         <p>Suporte Crosby</p>
-      </a>
+      </a> */}
     </nav>
   );
 };
