@@ -6,7 +6,7 @@ const Login = () => {
     <div>
       <Link to="home">
         <button className="flex items-center justify-center w-60 h-16 border-2 mt-60">
-          ENTRAR
+          LOGAS
         </button>
       </Link>
     </div>
