@@ -75,22 +75,22 @@ function Faturamento() {
         </div>
       ) : (
         <div className="block max-[500px]:overflow-x-auto max-[500px]:w-[300px]">
-          <table className="text-left text-xs whitespace-nowrap ">
-            <thead className="uppercase tracking-wider border-b-2 text-center">
+          <table className="text-left text-xs">
+            <thead className="uppercase tracking-wider border-b-2 text-center whitespace-nowrap">
               <tr>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="text-base  py-3 px-1">
                   Rank
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="text-base  py-3 px-1">
                   Empresa
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="text-base  py-3 px-1">
                   Faturamento
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="text-base  py-3 px-1">
                   PA
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="text-base  py-3 px-1">
                   Ticket Médio
                 </th>
               </tr>
@@ -98,28 +98,28 @@ function Faturamento() {
             <tbody>
               {dados.map((item) => (
                 <tr key={item.cd_grupoempresa} className="border-b-2 ">
-                  <th className="px-6 py-3 text-center">
+                  <th className="text-base  py-3 px-1 text-center whitespace-nowrap">
                     {item.faturamento > 0 ? item.rank : null}
                   </th>
                   <td
-                    className="px-6 py-3 text-center "
+                    className="text-base  py-3 px-1 text-center "
                     title={item.nome_fantasia}
                   >
                     {item.faturamento > 0 ? item.nome_fantasia : null}
                   </td>
-                  <td className="px-6 py-3 text-center">
+                  <td className="text-base  py-3 px-1 text-center whitespace-nowrap">
                     {item.faturamento.toFixed(2) > 1
                       ? item.faturamento.toFixed(2)
                       : null}
                   </td>
-                  <td className="px-6 py-3 text-center">
+                  <td className="text-base  py-3 px-1 text-center whitespace-nowrap">
                     {item.faturamento > 0
                       ? Number.parseFloat(
                           (+item.pasaida - +item.paentrada) / +item.trasaida,
                         ).toFixed(2)
                       : null}
                   </td>
-                  <td className="px-6 py-3 text-center">
+                  <td className="text-base  py-3 px-1 text-center whitespace-nowrap">
                     {item.faturamento > 0
                       ? Math.floor(item.faturamento / item.trasaida)
                       : null}
