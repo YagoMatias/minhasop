@@ -7,7 +7,7 @@ const Estoque = () => {
   const [dataFim, setDataFim] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const BaseURL = 'https://apinode-vhphp.ondigitalocean.app/';
+  const BaseURL = 'https://apicrosby-fpp9p.ondigitalocean.app/';
 
   const buscarDados = async (inicio = dataInicio, fim = dataFim) => {
     setLoading(true);

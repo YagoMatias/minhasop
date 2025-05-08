@@ -6,7 +6,7 @@ const Home = () => {
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
   const [loading, setLoading] = useState(false);
-  const BaseURL = 'https://apinode-vhphp.ondigitalocean.app/';
+  const BaseURL = 'https://apicrosby-fpp9p.ondigitalocean.app/';
 
   const buscarDados = async () => {
     if (!dataInicio || !dataFim) return;
