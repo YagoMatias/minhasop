@@ -70,9 +70,7 @@ function Faturamento() {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center mt-20 ">
-          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-        </div>
+       <LoadingCircle/>
       ) : (
         <div className="block max-[500px]:overflow-x-auto max-[500px]:w-[300px]">
           <table className="text-left text-xs">
