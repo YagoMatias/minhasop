@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import LoadingCircle from './loadingCiecle';
+import Nav from './Nav';
 
 const Home = () => {
   const [dados, setDados] = useState([]);
@@ -48,6 +49,7 @@ const Home = () => {
 
   return (
     <>
+      <Nav />
       <div className="p-6 space-y-2">
         <div className="flex flex-wrap gap-4 items-center">
           <input

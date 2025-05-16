@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import LoadingCircle from './loadingCiecle';
+import Nav from './Nav';
 
 function Faturamento() {
   const [dados, setDados] = useState([]);
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
   const [loading, setLoading] = useState(false);
-  const BaseURL = 'https://apicrosby-fpp9p.ondigitalocean.app/';
+  const BaseURL = 'http://localhost:3000/';
 
   const buscarDados = async () => {
     if (!dataInicio || !dataFim) return;
@@ -46,6 +47,7 @@ function Faturamento() {
 
   return (
     <>
+      <Nav />
       <div className="p-6 space-y-4">
         <div className="flex flex-wrap gap-4 items-center">
           <input
@@ -70,7 +72,7 @@ function Faturamento() {
       </div>
 
       {loading ? (
-       <LoadingCircle/>
+        <LoadingCircle />
       ) : (
         <div className="block max-[500px]:overflow-x-auto max-[500px]:w-[300px]">
           <table className="text-left text-xs">
