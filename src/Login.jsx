@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const BaseURL = 'http://localhost:3000/login';
+  const BaseURL = 'https://apicrosby-fpp9p.ondigitalocean.app/login';
   const [token, setToken] = useState(null);
   const navigate = useNavigate();
 
@@ -12,7 +12,7 @@ const Login = () => {
     console.log(token);
     try {
       const response = await axios.post(
-        'http://localhost:3000/login',
+        'https://apicrosby-fpp9p.ondigitalocean.app/login',
         JSON.stringify({ tokenid: Number(token) }),
         {
           headers: { 'Content-Type': 'application/json' },
