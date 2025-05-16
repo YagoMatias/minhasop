@@ -7,7 +7,7 @@ function Faturamento() {
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
   const [loading, setLoading] = useState(false);
-  const BaseURL = 'http://localhost:3000/';
+  const BaseURL = 'https://apicrosby-fpp9p.ondigitalocean.app/';
 
   const buscarDados = async () => {
     if (!dataInicio || !dataFim) return;
