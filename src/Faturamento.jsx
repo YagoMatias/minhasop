@@ -77,7 +77,7 @@ function Faturamento() {
             <LoadingCircle />
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="block max-[500px]:overflow-x-auto max-[500px]:w-[300px]">
             <table className="min-w-full border-collapse rounded-lg overflow-hidden shadow-lg">
               <thead className="bg-gray-900 text-white text-sm uppercase tracking-wider">
                 <tr>
