@@ -1,12 +1,11 @@
-import React from 'react';
 import './index.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import Faturamento from './Faturamento';
 import Estoque from './Estoque';
-import Nav from './Nav';
 import Banner from './imagens/bannercrosby.png';
 import Login from './Login';
+import ProtectedRoute from './ProtectedRoute';
 
 const App = () => {
   return (
@@ -20,12 +19,32 @@ const App = () => {
             srcset=""
           />
         </div>
-
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="home" element={<Home />} />
-          <Route path="faturamento" element={<Faturamento />} />
-          <Route path="estoque" element={<Estoque />} />
+          <Route
+            path="home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="faturamento"
+            element={
+              <ProtectedRoute>
+                <Faturamento />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="estoque"
+            element={
+              <ProtectedRoute>
+                <Estoque />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
     </BrowserRouter>

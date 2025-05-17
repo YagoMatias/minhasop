@@ -11,25 +11,27 @@ const Estoque = () => {
 
   const buscarDados = async (inicio = dataInicio, fim = dataFim) => {
     setLoading(true);
-    fetch(`${BaseURL}vendedor/?inicio=${inicio}&fim=${fim}`)
-      .then((res) => res.json())
-      .then((data) => {
-        const ordenado = [...data].sort(
-          (a, b) => b.faturamento - a.faturamento,
-        );
-        const comRank = ordenado.map((item, index) => ({
-          ...item,
-          rank: index + 1,
-        }));
-        setDados(comRank);
-      })
-      .catch((err) => console.error('Erro:', err))
-      .finally(() => setLoading(false));
+    try {
+      const res = await fetch(
+        `${BaseURL}vendedor/?inicio=${inicio}&fim=${fim}`,
+      );
+      const data = await res.json();
+      const ordenado = [...data].sort((a, b) => b.faturamento - a.faturamento);
+      const comRank = ordenado.map((item, index) => ({
+        ...item,
+        rank: index + 1,
+      }));
+      setDados(comRank);
+    } catch (err) {
+      console.error('Erro:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     const hoje = new Date();
-    hoje.setHours(hoje.getHours() - 3); // Fuso horário de Brasília
+    hoje.setHours(hoje.getHours() - 3);
     const dataBrasilia = hoje.toISOString().split('T')[0];
     setDataInicio(dataBrasilia);
     setDataFim(dataBrasilia);
@@ -39,90 +41,87 @@ const Estoque = () => {
   return (
     <>
       <Nav />
-      <div className="p-6 space-y-4">
-        <div className="flex flex-wrap gap-4 items-center">
+      <div className="p-6 space-y-6">
+        {/* Filtros */}
+        <div className="flex flex-wrap gap-4 items-center justify-center">
           <input
             type="date"
             value={dataInicio}
             onChange={(e) => setDataInicio(e.target.value)}
-            className="border px-2 py-1"
+            className="border px-4 py-2 rounded shadow-sm"
           />
           <input
             type="date"
             value={dataFim}
             onChange={(e) => setDataFim(e.target.value)}
-            className="border px-2 py-1"
+            className="border px-4 py-2 rounded shadow-sm"
           />
           <button
             onClick={() => buscarDados()}
-            className="bg-blue-600 text-white px-4 py-1 rounded"
+            className="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-2 rounded font-semibold shadow-md"
           >
             Buscar
           </button>
         </div>
-      </div>
 
-      {loading ? (
-        <div className="flex justify-center items-center mt-20 ">
-          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-      ) : (
-        <div className="block max-[500px]:overflow-x-auto max-[500px]:w-[300px]">
-          <table className="text-left text-xs">
-            <thead className="uppercase tracking-wider border-b-2 text-center whitespace-nowrap">
-              <tr>
-                <th scope="col" className="py-3 px-1 text-base">
-                  Rank
-                </th>
-                <th scope="col" className="py-3 px-1 text-base">
-                  Empresa
-                </th>
-                <th scope="col" className="py-3 px-1 text-base">
-                  Faturamento
-                </th>
-                <th scope="col" className="py-3 px-1 text-base">
-                  PA
-                </th>
-                <th scope="col" className="py-3 px-1 text-base">
-                  Ticket Médio
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {dados.map((item) => (
-                <tr key={item.cd_grupoempresa} className="border-b-2">
-                  <th className="py-3 px-1 text-base text-center whitespace-nowrap">
-                    {item.faturamento > 0 ? item.rank : null}
-                  </th>
-                  <td
-                    className="py-3 px-1 text-base text-center "
-                    title={item.nome_vendedor}
-                  >
-                    {item.faturamento > 0 ? item.nome_vendedor : null}
-                  </td>
-                  <td className="py-3 px-1 text-base text-center  whitespace-nowrap ">
-                    {item.faturamento.toFixed(2) > 1
-                      ? item.faturamento.toFixed(2)
-                      : null}
-                  </td>
-                  <td className="py-3 px-1 text-base text-center  whitespace-nowrap ">
-                    {item.faturamento > 0
-                      ? Number.parseFloat(
-                          (+item.pasaida - +item.paentrada) / +item.trasaida,
-                        ).toFixed(2)
-                      : null}
-                  </td>
-                  <td className="py-3 px-1 text-base text-center  whitespace-nowrap ">
-                    {item.faturamento > 0
-                      ? Math.floor(item.faturamento / item.trasaida)
-                      : null}
-                  </td>
+        {/* Tabela ou Loading */}
+        {loading ? (
+          <div className="flex justify-center items-center mt-20">
+            <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full border-collapse rounded-lg overflow-hidden shadow-lg">
+              <thead className="bg-gray-900 text-white text-sm uppercase tracking-wider">
+                <tr>
+                  <th className="px-4 py-3 text-center">#</th>
+                  <th className="px-4 py-3 text-left">Vendedor</th>
+                  <th className="px-4 py-3 text-center">Faturamento (R$)</th>
+                  <th className="px-4 py-3 text-center">PA</th>
+                  <th className="px-4 py-3 text-center">Ticket Médio</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+              <tbody>
+                {dados.map((item) =>
+                  item.faturamento > 0 ? (
+                    <tr
+                      key={item.cd_grupoempresa}
+                      className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-sm border-b"
+                    >
+                      <td className="px-4 py-3 text-center font-bold text-blue-700">
+                        {item.rank}
+                      </td>
+                      <td
+                        className="px-4 py-3 font-medium"
+                        title={item.nome_vendedor}
+                      >
+                        {item.nome_vendedor}
+                      </td>
+                      <td className="px-4 py-3 text-center font-semibold text-green-600">
+                        {item.faturamento.toLocaleString('pt-BR', {
+                          style: 'currency',
+                          currency: 'BRL',
+                        })}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {Number.parseFloat(
+                          (+item.pasaida - +item.paentrada) / +item.trasaida,
+                        ).toFixed(2)}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        R${' '}
+                        {Math.floor(item.faturamento / item.trasaida)
+                          .toFixed(2)
+                          .replace('.', ',')}
+                      </td>
+                    </tr>
+                  ) : null,
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </>
   );
 };
