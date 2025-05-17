@@ -2,7 +2,7 @@ import './index.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import Faturamento from './Faturamento';
-import Estoque from './Estoque';
+import Estoque from './vendedores';
 import Banner from './imagens/bannercrosby.png';
 import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';

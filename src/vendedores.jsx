@@ -70,16 +70,20 @@ const Estoque = () => {
             <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
-          <div className="block max-[500px]:overflow-x-auto max-[500px]:w-[300px]">
+          <div className="block max-[500px]:overflow-x-auto max-[500px]:w-[350px]">
             <div className="min-w-[700px]">
               <table className="w-full border-collapse rounded-lg overflow-hidden shadow-lg">
-                <thead className="bg-blue-600 text-white text-sm uppercase tracking-wider">
+                <thead className="bg-gray-900 text-white text-sm uppercase tracking-wider">
                   <tr>
-                    <th className="px-4 py-3 text-center">#</th>
-                    <th className="px-4 py-3 text-left">Vendedor</th>
-                    <th className="px-4 py-3 text-center">Faturamento (R$)</th>
-                    <th className="px-4 py-3 text-center">PA</th>
-                    <th className="px-4 py-3 text-center">Ticket Médio</th>
+                    <th className="px-4 py-3 text-center text-sm">#</th>
+                    <th className="px-4 py-3 text-left text-sm">Vendedor</th>
+                    <th className="px-4 py-3 text-center text-sm">
+                      Faturamento (R$)
+                    </th>
+                    <th className="px-4 py-3 text-center text-sm">PA</th>
+                    <th className="px-4 py-3 text-center text-sm">
+                      Ticket Médio
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -89,27 +93,27 @@ const Estoque = () => {
                         key={item.cd_grupoempresa}
                         className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-sm border-b"
                       >
-                        <td className="px-4 py-3 text-center font-bold text-blue-700">
+                        <td className="px-4 py-3 text-center font-bold text-blue-700 text-xs">
                           {item.rank}
                         </td>
                         <td
-                          className="px-4 py-3 font-medium"
+                          className="px-4 py-3 font-medium text-xs"
                           title={item.nome_vendedor}
                         >
                           {item.nome_vendedor}
                         </td>
-                        <td className="px-4 py-3 text-center font-semibold text-green-600">
+                        <td className="px-4 py-3 text-center font-semibold text-green-600 text-xs">
                           {item.faturamento.toLocaleString('pt-BR', {
                             style: 'currency',
                             currency: 'BRL',
                           })}
                         </td>
-                        <td className="px-4 py-3 text-center">
+                        <td className="px-4 py-3 text-center text-xs">
                           {Number.parseFloat(
                             (+item.pasaida - +item.paentrada) / +item.trasaida,
                           ).toFixed(2)}
                         </td>
-                        <td className="px-4 py-3 text-center">
+                        <td className="px-4 py-3 text-center text-xs">
                           R${' '}
                           {Math.floor(item.faturamento / item.trasaida)
                             .toFixed(2)
