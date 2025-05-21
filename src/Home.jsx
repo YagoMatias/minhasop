@@ -5,20 +5,18 @@ import { FaMoneyBillWave, FaChartLine, FaUserFriends } from 'react-icons/fa';
 
 const Home = () => {
   const [dados, setDados] = useState([]);
-  const [empresaSelecionada, setEmpresaSelecionada] = useState('todas'); // 'todas' = soma geral
+  const [empresaSelecionada, setEmpresaSelecionada] = useState('todas');
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
   const [loading, setLoading] = useState(false);
   const BaseURL = 'https://apicrosby-fpp9p.ondigitalocean.app/';
 
-  const buscarDados = async () => {
-    if (!dataInicio || !dataFim) return;
+  const buscarDados = async (inicio, fim) => {
+    if (!inicio || !fim) return;
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${BaseURL}/?inicio=${dataInicio}&fim=${dataFim}`
-      );
+      const res = await fetch(`${BaseURL}/?inicio=${inicio}&fim=${fim}`);
       const data = await res.json();
 
       const ordenado = [...data].sort((a, b) => b.faturamento - a.faturamento);
@@ -27,7 +25,15 @@ const Home = () => {
         rank: index + 1,
       }));
       setDados(comRank);
-      setEmpresaSelecionada('todas'); // Começa mostrando toda a rede
+
+      // Se a seleção atual não existe mais, reseta para 'todas'
+      if (
+        empresaSelecionada !== 'todas' &&
+        !comRank.find((d) => d.rank === Number(empresaSelecionada))
+      ) {
+        setEmpresaSelecionada('todas');
+      }
+      // Senão mantém a seleção
     } catch (err) {
       console.error('Erro:', err);
     } finally {
@@ -35,22 +41,22 @@ const Home = () => {
     }
   };
 
+  // Data inicial padrão = hoje -3h
   useEffect(() => {
     const hoje = new Date();
     hoje.setUTCHours(hoje.getUTCHours() - 3);
     const dataBrasilia = hoje.toISOString().split('T')[0];
-
     setDataInicio(dataBrasilia);
     setDataFim(dataBrasilia);
   }, []);
 
+  // Busca dados automaticamente sempre que dataInicio ou dataFim mudar
   useEffect(() => {
     if (dataInicio && dataFim) {
-      buscarDados();
+      buscarDados(dataInicio, dataFim);
     }
   }, [dataInicio, dataFim]);
 
-  // Soma dos dados para toda a rede
   const dadosTotais = dados.reduce(
     (acc, cur) => {
       acc.faturamento += Number(cur.faturamento) || 0;
@@ -62,7 +68,6 @@ const Home = () => {
     { faturamento: 0, paentrada: 0, pasaida: 0, trasaida: 0 }
   );
 
-  // Dados a mostrar: ou totais ou a empresa selecionada
   const dadosExibir =
     empresaSelecionada === 'todas'
       ? dadosTotais
@@ -85,13 +90,13 @@ const Home = () => {
             onChange={(e) => setDataFim(e.target.value)}
             className="border px-3 py-2 rounded-md shadow"
           />
-           <div className="flex justify-center">
+          <div className="flex justify-center">
               <select
                 value={empresaSelecionada}
                 onChange={(e) => setEmpresaSelecionada(e.target.value)}
                 className="border px-3 py-2 rounded-md shadow max-w-xs"
               >
-                <option value="todas">VAREJO CROSBY</option>
+                <option value="todas">ESCOLHA UMA LOJA</option>
                 {dados.map((item) => (
                   <option key={item.rank} value={item.rank}>
                     {item.nome_fantasia || item.nome || `Empresa ${item.rank}`}
@@ -99,12 +104,8 @@ const Home = () => {
                 ))}
               </select>
             </div>
-          <button
-            onClick={buscarDados}
-            className="bg-blue-600 text-white px-5 py-2 rounded-md shadow hover:bg-blue-700 transition"
-          >
-            Buscar
-          </button>
+          {/* Se quiser, pode manter o botão, mas não obrigatório */}
+          {/* <button onClick={() => buscarDados(dataInicio, dataFim)} ...>Buscar</button> */}
         </div>
 
         {loading ? (
@@ -113,11 +114,9 @@ const Home = () => {
           </div>
         ) : dados.length > 0 ? (
           <>
-           
-
             {dadosExibir && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 px-6 mt-10">
-                {/* Faturamento Total */}
+                {/* Faturamento */}
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center justify-center text-center">
                   <FaMoneyBillWave className="text-4xl text-green-500 mb-4" />
                   <h2 className="text-lg font-semibold text-gray-700 dark:text-white">
