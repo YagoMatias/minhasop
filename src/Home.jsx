@@ -5,6 +5,7 @@ import { FaMoneyBillWave, FaChartLine, FaUserFriends } from 'react-icons/fa';
 
 const Home = () => {
   const [dados, setDados] = useState([]);
+  const [empresaSelecionada, setEmpresaSelecionada] = useState('todas'); // 'todas' = soma geral
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ const Home = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `${BaseURL}home/?inicio=${dataInicio}&fim=${dataFim}`,
+        `${BaseURL}/?inicio=${dataInicio}&fim=${dataFim}`
       );
       const data = await res.json();
 
@@ -26,6 +27,7 @@ const Home = () => {
         rank: index + 1,
       }));
       setDados(comRank);
+      setEmpresaSelecionada('todas'); // Começa mostrando toda a rede
     } catch (err) {
       console.error('Erro:', err);
     } finally {
@@ -48,7 +50,23 @@ const Home = () => {
     }
   }, [dataInicio, dataFim]);
 
-  const resumo = dados.length > 0 ? dados[0] : null;
+  // Soma dos dados para toda a rede
+  const dadosTotais = dados.reduce(
+    (acc, cur) => {
+      acc.faturamento += Number(cur.faturamento) || 0;
+      acc.paentrada += Number(cur.paentrada) || 0;
+      acc.pasaida += Number(cur.pasaida) || 0;
+      acc.trasaida += Number(cur.trasaida) || 0;
+      return acc;
+    },
+    { faturamento: 0, paentrada: 0, pasaida: 0, trasaida: 0 }
+  );
+
+  // Dados a mostrar: ou totais ou a empresa selecionada
+  const dadosExibir =
+    empresaSelecionada === 'todas'
+      ? dadosTotais
+      : dados.find((d) => d.rank === Number(empresaSelecionada));
 
   return (
     <>
@@ -67,6 +85,20 @@ const Home = () => {
             onChange={(e) => setDataFim(e.target.value)}
             className="border px-3 py-2 rounded-md shadow"
           />
+           <div className="flex justify-center">
+              <select
+                value={empresaSelecionada}
+                onChange={(e) => setEmpresaSelecionada(e.target.value)}
+                className="border px-3 py-2 rounded-md shadow max-w-xs"
+              >
+                <option value="todas">VAREJO CROSBY</option>
+                {dados.map((item) => (
+                  <option key={item.rank} value={item.rank}>
+                    {item.nome_fantasia || item.nome || `Empresa ${item.rank}`}
+                  </option>
+                ))}
+              </select>
+            </div>
           <button
             onClick={buscarDados}
             className="bg-blue-600 text-white px-5 py-2 rounded-md shadow hover:bg-blue-700 transition"
@@ -79,45 +111,64 @@ const Home = () => {
           <div className="flex justify-center mt-20">
             <LoadingCircle />
           </div>
+        ) : dados.length > 0 ? (
+          <>
+           
+
+            {dadosExibir && (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 px-6 mt-10">
+                {/* Faturamento Total */}
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center justify-center text-center">
+                  <FaMoneyBillWave className="text-4xl text-green-500 mb-4" />
+                  <h2 className="text-lg font-semibold text-gray-700 dark:text-white">
+                    Faturamento Total
+                  </h2>
+                  <p className="text-2xl font-bold text-green-700 dark:text-green-300 mt-2">
+                    {dadosExibir.faturamento.toLocaleString
+                      ? dadosExibir.faturamento.toLocaleString('pt-BR', {
+                          style: 'currency',
+                          currency: 'BRL',
+                        })
+                      : dadosExibir.faturamento}
+                  </p>
+                </div>
+
+                {/* Ticket Médio */}
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center justify-center text-center">
+                  <FaChartLine className="text-4xl text-blue-500 mb-4" />
+                  <h2 className="text-lg font-semibold text-gray-700 dark:text-white">
+                    Ticket Médio
+                  </h2>
+                  <p className="text-2xl font-bold text-blue-700 dark:text-blue-300 mt-2">
+                    R${' '}
+                    {dadosExibir.trasaida > 0
+                      ? Math.floor(dadosExibir.faturamento / dadosExibir.trasaida)
+                      : 0}
+                    ,00
+                  </p>
+                </div>
+
+                {/* PA */}
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center justify-center text-center">
+                  <FaUserFriends className="text-4xl text-purple-500 mb-4" />
+                  <h2 className="text-lg font-semibold text-gray-700 dark:text-white">
+                    PA
+                  </h2>
+                  <p className="text-2xl font-bold text-purple-700 dark:text-purple-300 mt-2">
+                    {dadosExibir.trasaida > 0
+                      ? (
+                          (Number(dadosExibir.pasaida) -
+                            Number(dadosExibir.paentrada)) /
+                          Number(dadosExibir.trasaida)
+                        ).toFixed(2)
+                      : '0.00'}
+                  </p>
+                </div>
+              </div>
+            )}
+          </>
         ) : (
-          resumo && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 px-6 mt-10">
-              {/* TOTAL DE VENDAS */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center justify-center text-center">
-                <FaMoneyBillWave className="text-4xl text-green-500 mb-4" />
-                <h2 className="text-lg font-semibold text-gray-700 dark:text-white">
-                  Faturamento Total
-                </h2>
-                <p className="text-2xl font-bold text-green-700 dark:text-green-300 mt-2">
-                  R$ {resumo.faturamento.toFixed(2)}
-                </p>
-              </div>
-
-              {/* TICKET MÉDIO */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center justify-center text-center">
-                <FaChartLine className="text-4xl text-blue-500 mb-4" />
-                <h2 className="text-lg font-semibold text-gray-700 dark:text-white">
-                  Ticket Médio
-                </h2>
-                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300 mt-2">
-                  R$ {Math.floor(resumo.faturamento / resumo.trasaida)},00
-                </p>
-              </div>
-
-              {/* PA */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center justify-center text-center">
-                <FaUserFriends className="text-4xl text-purple-500 mb-4" />
-                <h2 className="text-lg font-semibold text-gray-700 dark:text-white">
-                  PA
-                </h2>
-                <p className="text-2xl font-bold text-purple-700 dark:text-purple-300 mt-2">
-                  {Number.parseFloat(
-                    (+resumo.pasaida - +resumo.paentrada) / +resumo.trasaida,
-                  ).toFixed(2)}
-                </p>
-              </div>
-            </div>
-          )
+          <p className="text-center mt-10">Nenhum dado disponível.</p>
         )}
       </div>
     </>
