@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Nav from './Nav';
 
-const Estoque = () => {
+const Vendedores = () => {
   const [dados, setDados] = useState([]);
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
@@ -132,4 +132,4 @@ const Estoque = () => {
   );
 };
 
-export default Estoque;
+export default Vendedores;

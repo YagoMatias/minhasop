@@ -6,6 +6,7 @@ import Vendedores from './vendedores';
 import Banner from './imagens/bannercrosby.png';
 import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
+import Posestoque from './Posestoque';
 
 const App = () => {
   return (
@@ -38,10 +39,18 @@ const App = () => {
             }
           />
           <Route
-            path="estoque"
+            path="vendedores"
             element={
               <ProtectedRoute>
                 <Vendedores />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="estoque"
+            element={
+              <ProtectedRoute>
+                <Posestoque />
               </ProtectedRoute>
             }
           />
