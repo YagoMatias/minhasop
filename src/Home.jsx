@@ -16,7 +16,7 @@ const Home = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(`${BaseURL}/?inicio=${inicio}&fim=${fim}`);
+      const res = await fetch(`${BaseURL}?inicio=${inicio}&fim=${fim}`);
       const data = await res.json();
 
       const ordenado = [...data].sort((a, b) => b.faturamento - a.faturamento);
@@ -33,7 +33,7 @@ const Home = () => {
       ) {
         setEmpresaSelecionada('todas');
       }
-      // Senão mantém a seleção
+      // Se não mantém a seleção
     } catch (err) {
       console.error('Erro:', err);
     } finally {
@@ -104,8 +104,6 @@ const Home = () => {
                 ))}
               </select>
             </div>
-          {/* Se quiser, pode manter o botão, mas não obrigatório */}
-          {/* <button onClick={() => buscarDados(dataInicio, dataFim)} ...>Buscar</button> */}
         </div>
 
         {loading ? (
