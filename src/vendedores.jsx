@@ -6,6 +6,7 @@ const Vendedores = () => {
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
   const [loading, setLoading] = useState(true);
+ const [tipoLoja, setTipoLoja] = useState('Todos'); // Filtro adicionado
 
   const BaseURL = 'https://apicrosby-fpp9p.ondigitalocean.app/';
 
@@ -56,6 +57,15 @@ const Vendedores = () => {
             onChange={(e) => setDataFim(e.target.value)}
             className="border px-4 py-2 rounded shadow-sm"
           />
+          <select
+            value={tipoLoja}
+            onChange={(e) => setTipoLoja(e.target.value)}
+            className="border px-4 py-2 rounded shadow-sm"
+          >
+            <option value="Todos">TODAS</option>
+            <option value="Franquias">FRANQUIAS</option>
+            <option value="Proprias">PRÓPRIAS</option>
+          </select>
           <button
             onClick={() => buscarDados()}
             className="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-2 rounded font-semibold shadow-md"
@@ -87,7 +97,13 @@ const Vendedores = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {dados.map((item) =>
+                  {dados .filter((item) => {
+                  if (tipoLoja === 'Franquias')
+                  return item.nome_vendedor?.includes('VND') || item.nome_vendedor?.includes('ADM');
+                  if (tipoLoja === 'Proprias')
+                  return !item.nome_vendedor?.includes('VND') && !item.nome_vendedor?.includes('ADM');
+                  return true;
+                  }).map((item) =>
                     item.faturamento > 0 ? (
                       <tr
                         key={item.cd_grupoempresa}

@@ -6,6 +6,7 @@ function Faturamento() {
   const [dados, setDados] = useState([]);
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
+  const [tipoLoja, setTipoLoja] = useState('Todos'); // Filtro adicionado
   const [loading, setLoading] = useState(false);
   const BaseURL = 'https://apicrosby-fpp9p.ondigitalocean.app/';
 
@@ -63,6 +64,15 @@ function Faturamento() {
             onChange={(e) => setDataFim(e.target.value)}
             className="border px-4 py-2 rounded shadow-sm"
           />
+          <select
+            value={tipoLoja}
+            onChange={(e) => setTipoLoja(e.target.value)}
+            className="border px-4 py-2 rounded shadow-sm"
+          >
+            <option value="Todos">TODAS</option>
+            <option value="Franquias">FRANQUIAS</option>
+            <option value="Proprias">PRÓPRIAS</option>
+          </select>
           <button
             onClick={buscarDados}
             className="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-2 rounded font-semibold shadow-md"
@@ -83,51 +93,53 @@ function Faturamento() {
                 <tr>
                   <th className="px-4 py-3 text-center text-xs">#</th>
                   <th className="px-4 py-3 text-left text-xs">Empresa</th>
-                  <th className="px-4 py-3 text-center text-xs">
-                    Faturamento (R$)
-                  </th>
+                  <th className="px-4 py-3 text-center text-xs">Faturamento (R$)</th>
                   <th className="px-4 py-3 text-center text-xs">PA</th>
-                  <th className="px-4 py-3 text-center text-xs">
-                    Ticket Médio
-                  </th>
+                  <th className="px-4 py-3 text-center text-xs">Ticket Médio</th>
                 </tr>
               </thead>
               <tbody>
-                {dados.map((item) =>
-                  item.faturamento > 0 ? (
-                    <tr
-                      key={item.cd_grupoempresa}
-                      className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-sm border-b "
-                    >
-                      <td className="px-4 py-3 text-center font-bold text-blue-700 text-xs">
-                        {item.rank}
-                      </td>
-                      <td
-                        className="px-4 py-3 font-medium text-xs"
-                        title={item.nome_fantasia}
+                {dados
+                  .filter((item) => {
+                    if (tipoLoja === 'Franquias') return item.nome_fantasia?.startsWith('F');
+                    if (tipoLoja === 'Proprias') return !item.nome_fantasia?.startsWith('F');
+                    return true;
+                  })
+                  .map((item) =>
+                    item.faturamento > 0 ? (
+                      <tr
+                        key={item.cd_grupoempresa}
+                        className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-sm border-b"
                       >
-                        {item.nome_fantasia}
-                      </td>
-                      <td className="px-4 py-3 text-center font-semibold text-green-600 text-xs">
-                        {item.faturamento.toLocaleString('pt-BR', {
-                          style: 'currency',
-                          currency: 'BRL',
-                        })}
-                      </td>
-                      <td className="px-4 py-3 text-center text-xs">
-                        {Number.parseFloat(
-                          (+item.pasaida - +item.paentrada) / +item.trasaida,
-                        ).toFixed(2)}
-                      </td>
-                      <td className="px-4 py-3 text-center text-xs">
-                        R${' '}
-                        {Math.floor(item.faturamento / item.trasaida)
-                          .toFixed(2)
-                          .replace('.', ',')}
-                      </td>
-                    </tr>
-                  ) : null,
-                )}
+                        <td className="px-4 py-3 text-center font-bold text-blue-700 text-xs">
+                          {item.rank}
+                        </td>
+                        <td
+                          className="px-4 py-3 font-medium text-xs"
+                          title={item.nome_fantasia}
+                        >
+                          {item.nome_fantasia}
+                        </td>
+                        <td className="px-4 py-3 text-center font-semibold text-green-600 text-xs">
+                          {item.faturamento.toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                          })}
+                        </td>
+                        <td className="px-4 py-3 text-center text-xs">
+                          {Number.parseFloat(
+                            (+item.pasaida - +item.paentrada) / +item.trasaida,
+                          ).toFixed(2)}
+                        </td>
+                        <td className="px-4 py-3 text-center text-xs">
+                          R${' '}
+                          {Math.floor(item.faturamento / item.trasaida)
+                            .toFixed(2)
+                            .replace('.', ',')}
+                        </td>
+                      </tr>
+                    ) : null,
+                  )}
               </tbody>
             </table>
           </div>
