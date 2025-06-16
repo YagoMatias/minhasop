@@ -7,6 +7,8 @@ import Banner from './imagens/bannercrosby.png';
 import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import Posestoque from './Posestoque';
+import Estoque from './estoque';
+import Curvaabc from './curvaabc';
 
 const App = () => {
   return (
@@ -50,7 +52,23 @@ const App = () => {
             path="estoque"
             element={
               <ProtectedRoute>
+                <Estoque/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="posestoque"
+            element={
+              <ProtectedRoute>
                 <Posestoque />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="curvaabc"
+            element={
+              <ProtectedRoute>
+                <Curvaabc/>
               </ProtectedRoute>
             }
           />

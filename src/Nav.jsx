@@ -1,12 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Referência para o dropdown
+  const dropdownRef = useRef(null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  // Fechar dropdown se clicar fora dele
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false); // Fecha o dropdown se clicar fora
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside); // Adiciona o evento de clique fora
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside); // Remove o evento quando o componente for desmontado
+    };
+  }, []);
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900 w-full">
@@ -71,18 +93,51 @@ const Nav = () => {
                 Rank Vendedores
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                to="/estoque"
+            {/* Dropdown: Posição de Estoque */}
+            <li className="relative" ref={dropdownRef}>
+              <button
+                onClick={toggleDropdown}
                 className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                onClick={() => setIsOpen(false)}
               >
-               Posição de Estoque
-              </NavLink>
+                Estoque
+              </button>
+              {isDropdownOpen && (
+                <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10">
+                  <ul className="space-y-2 py-2">
+                    <li>
+                      <NavLink
+                        to="/posestoque"
+                        className="block text-gray-700 dark:text-white px-4 py-2 text-sm"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Posição de Estoque
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/curvaabc"
+                        className="block text-gray-700 dark:text-white px-4 py-2 text-sm"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Curva ABC de Vendas
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/estoque-completo"
+                        className="block text-gray-700 dark:text-white px-4 py-2 text-sm"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Estoque Completo
+                      </NavLink>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </li>
             <li>
               <a
-                className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100     md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white     md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white     md:dark:hover:bg-transparent"
+                className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 target="blank"
                 onClick={() => setIsOpen(false)}
                 href="https://cursos.universidadecrosby.com/"

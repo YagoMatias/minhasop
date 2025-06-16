@@ -8,7 +8,7 @@ function Faturamento() {
   const [dataFim, setDataFim] = useState('');
   const [tipoLoja, setTipoLoja] = useState('Todos'); // Filtro adicionado
   const [loading, setLoading] = useState(false);
-  const BaseURL = 'https://apicrosby-fpp9p.ondigitalocean.app/';
+  const BaseURL = 'http://localhost:3000/';
 
   const buscarDados = async () => {
     if (!dataInicio || !dataFim) return;
