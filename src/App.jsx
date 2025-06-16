@@ -7,7 +7,7 @@ import Banner from './imagens/bannercrosby.png';
 import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import Posestoque from './Posestoque';
-import Estoque from './estoque';
+import Estoque from './Estoque';
 import Curvaabc from './curvaabc';
 
 const App = () => {
