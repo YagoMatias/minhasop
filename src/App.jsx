@@ -8,7 +8,7 @@ import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import Posestoque from './Posestoque';
 import Estoque from './Estoque';
-import Curvaabc from './curvaabc';
+import Curvaabc from './Curvaabc';
 
 const App = () => {
   return (
