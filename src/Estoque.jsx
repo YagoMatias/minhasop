@@ -4,7 +4,7 @@ import Nav from "./Nav";
 const Estoque = () => {
    const [dados,setDados] = useState([]);
    const [loading, setLoading] = useState(false);
-   const BaseURL = 'http://localhost:3000/';
+   const BaseURL = 'https://apicrosby-fpp9p.ondigitalocean.app/';
 
    const buscarDados = async () => {
     setLoading(true)
